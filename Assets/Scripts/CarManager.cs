@@ -13,9 +13,13 @@ public class CarManager : MonoBehaviour
 	public GameObject LegRightSlidingTarget;
 
 	public Rigidbody rb;
+	
+	public AudioClip CarHorn;
+	public AudioClip CarWheee;
+	private AudioSource AudioSource;
 
 	private bool bStopped = true;
-	private bool bResetingBodyCar = false;
+	private bool bBodyCarManualMove = false;
 
 	private float fSlidingTime = 0.0f;
 
@@ -26,17 +30,23 @@ public class CarManager : MonoBehaviour
 
 	private int NextLegToMove = 0; // 0:left, 1:right
 
+    void Start()
+    {
+		AudioSource = GetComponent<AudioSource>();
+	}
+
     void FixedUpdate()
     {
+		if (GameManager.bGameIsOver)
+			return;
+
 		if (bStopped)
 		{
 			if (Input.GetAxis("Jump") > 0.0f)
 			{
-				// Launch the car
-				rb.isKinematic = false;
-				rb.AddForce(gameObject.transform.up * -fLaunchSpeed); // Using up*-1 because Car has a base rotation of -90
+				bBodyCarManualMove = true;
 				bStopped = false;
-				fSlidingTime = 0.0f;
+				StartCoroutine("LaunchCar");
 			}
 			else if (Input.GetAxis("Horizontal") != 0.0f)
 			{
@@ -59,7 +69,7 @@ public class CarManager : MonoBehaviour
 				}
 			}
 		}
-		else if (!bResetingBodyCar)
+		else if (!bBodyCarManualMove)
         {
 			fSlidingTime += Time.fixedDeltaTime;
 
@@ -73,8 +83,11 @@ public class CarManager : MonoBehaviour
 					// Reset car stence to "prepare launch"
 					LegLeft.SetFootToInitialTarget(true);
 					LegRight.SetFootToInitialTarget(true);
+					
+					AudioSource.Stop();
+					bBodyCarManualMove = true;
+
 					StartCoroutine("ResetBodyCar");
-					bResetingBodyCar = true;
 				}
                 else
 				{
@@ -84,6 +97,42 @@ public class CarManager : MonoBehaviour
 			}
         }
     }
+
+    void Update()
+	{
+		if (GameManager.bGameIsOver)
+			return;
+
+		if (bStopped && Input.GetAxis("Fire1") > 0.0f)
+        {
+			if (!AudioSource.isPlaying)
+			{
+				AudioSource.clip = CarHorn;
+				AudioSource.Play();
+			}
+		}
+	}
+
+    IEnumerator LaunchCar()
+    {
+		// Move back the body car, then apply force
+		for (int i = 0; i < 25; ++i)
+		{
+			Vector3 vLoc = rb.transform.position;
+			vLoc -= rb.transform.up * -0.1f;
+			rb.transform.position = vLoc;
+
+			yield return null;
+		}
+
+		rb.isKinematic = false;
+		rb.AddForce(gameObject.transform.up * -fLaunchSpeed); // Using up*-1 because Car has a base rotation of -90
+		bBodyCarManualMove = false;
+		fSlidingTime = 0.0f;
+
+		AudioSource.clip = CarWheee;
+		AudioSource.Play();
+	}
 
 	IEnumerator ResetBodyCar()
     {
@@ -99,15 +148,23 @@ public class CarManager : MonoBehaviour
 		}
 
 		bStopped = true;
-		bResetingBodyCar = false;
+		bBodyCarManualMove = false;
 	}
 
     void OnCollisionEnter(Collision collision)
     {
-		if (collision.gameObject.CompareTag("Wheel"))
+		if (collision.gameObject.CompareTag("Wheel") && collision.rigidbody.isKinematic)
         {
-			Destroy(collision.gameObject);
+			Vector3 vCollisionDir = collision.gameObject.transform.position - gameObject.transform.position;
+			vCollisionDir.y = collision.gameObject.transform.position.y;
+			vCollisionDir.Normalize();
+
+			collision.rigidbody.isKinematic = false;
+
+			collision.rigidbody.AddForce(vCollisionDir * collision.impulse.magnitude);
 			GameManager.AddCapturedWheel();
+
+			collision.gameObject.GetComponent<WheelManager>().OnHitByCar();
 		}
     }
 }

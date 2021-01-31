@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-
     public GameObject CarToFollow;
 
     public float fBackDistance = 10.0f;
