@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CarManager : MonoBehaviour
 {
+	public GameManager GameManager;
+
 	public LegManager LegLeft;
 	public LegManager LegRight;
 
@@ -20,13 +22,9 @@ public class CarManager : MonoBehaviour
 	public float fLaunchSpeed = 15000.0f;
 	public float fRotationSpeed = 50.0f;
 
-	public float fMaxLegDistanceFromTarget = 0.2f;
+	public float fMaxLegDistanceFromTarget = 0.1f;
 
 	private int NextLegToMove = 0; // 0:left, 1:right
-
-    void Start()
-    {
-	}
 
     void FixedUpdate()
     {
@@ -103,4 +101,13 @@ public class CarManager : MonoBehaviour
 		bStopped = true;
 		bResetingBodyCar = false;
 	}
+
+    void OnCollisionEnter(Collision collision)
+    {
+		if (collision.gameObject.CompareTag("Wheel"))
+        {
+			Destroy(collision.gameObject);
+			GameManager.AddCapturedWheel();
+		}
+    }
 }

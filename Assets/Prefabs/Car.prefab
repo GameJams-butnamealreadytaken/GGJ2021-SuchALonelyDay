@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 59532805352821596}
   - component: {fileID: 8697474188333566212}
   - component: {fileID: 4215456180148047595}
-  - component: {fileID: 8847658818181002880}
+  - component: {fileID: 3223958188208484708}
   m_Layer: 8
   m_Name: Car
   m_TagString: CarBody
@@ -160,14 +160,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7520008ba7a01f4ab537be36eeee3be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameManager: {fileID: 0}
   LegLeft: {fileID: 1227364201836567647}
   LegRight: {fileID: 1901078531775921315}
   LegLeftSlidingTarget: {fileID: 2166329737928457678}
   LegRightSlidingTarget: {fileID: 2446936331275238203}
   rb: {fileID: 4215456180148047595}
   fLaunchSpeed: 15000
-  fRotationSpeed: 30
-  fMaxLegDistanceFromTarget: 1.5
+  fRotationSpeed: 50
+  fMaxLegDistanceFromTarget: 0.15
 --- !u!54 &4215456180148047595
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -184,8 +185,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!65 &8847658818181002880
-BoxCollider:
+--- !u!64 &3223958188208484708
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -194,9 +195,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.031524435, y: 0.066624664, z: 0.022373728}
-  m_Center: {x: 0, y: -0.0016548674, z: 0.0009419883}
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8039613103989778838, guid: a2f41d4e207ad524cb3b46f62478074a, type: 3}
 --- !u!1 &4735146430042557029
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,11 +32,6 @@ public class LegManager : MonoBehaviour
         }
 
     }
-
-    void Update()
-    {
-        
-    }
 	
     public void SetFootTarget(Vector3 vNewTargetLocation)
     {

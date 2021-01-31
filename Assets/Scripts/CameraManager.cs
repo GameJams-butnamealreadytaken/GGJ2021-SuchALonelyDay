@@ -11,12 +11,6 @@ public class CameraManager : MonoBehaviour
     public float fHeightDistance = 4.0f;
     public float fAngleX = 15.0f;
 
-    void Start()
-    {
-        
-    }
-
-
     void Update()
     {
         if (CarToFollow)
