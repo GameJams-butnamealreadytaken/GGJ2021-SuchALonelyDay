@@ -16,7 +16,11 @@ public class CarManager : MonoBehaviour
 	
 	public AudioClip CarHorn;
 	public AudioClip CarWheee;
+	public AudioClip CarWheee2;
+	public AudioClip CarWheee3;
 	private AudioSource AudioSource;
+
+	private float fCarWheeTimer = 0.0f;
 
 	private bool bStopped = true;
 	private bool bBodyCarManualMove = false;
@@ -47,6 +51,13 @@ public class CarManager : MonoBehaviour
 				bBodyCarManualMove = true;
 				bStopped = false;
 				StartCoroutine("LaunchCar");
+
+				if (fCarWheeTimer < 2.5f)
+				{
+					AudioSource.clip = CarWheee3;
+					AudioSource.Play();
+					fCarWheeTimer = 0.0f;
+				}
 			}
 			else if (Input.GetAxis("Horizontal") != 0.0f)
 			{
@@ -88,6 +99,13 @@ public class CarManager : MonoBehaviour
 					bBodyCarManualMove = true;
 
 					StartCoroutine("ResetBodyCar");
+
+					if (fCarWheeTimer >= 2.5f)
+                    {
+						AudioSource.clip = CarWheee2;
+						AudioSource.Play();
+						fCarWheeTimer = 0.0f;
+					}
 				}
                 else
 				{
@@ -102,6 +120,8 @@ public class CarManager : MonoBehaviour
 	{
 		if (GameManager.bGameIsOver)
 			return;
+
+		fCarWheeTimer += Time.deltaTime;
 
 		if (bStopped && Input.GetAxis("Fire1") > 0.0f)
         {
@@ -132,6 +152,7 @@ public class CarManager : MonoBehaviour
 
 		AudioSource.clip = CarWheee;
 		AudioSource.Play();
+		fCarWheeTimer = 0.0f;
 	}
 
 	IEnumerator ResetBodyCar()

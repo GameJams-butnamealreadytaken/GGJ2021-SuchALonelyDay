@@ -54,7 +54,7 @@ public class GUIManager : MonoBehaviour
         {
             StarCount = 2;
 
-            if (fTimerRemaining > fTimer * 0.5f)
+            if (fTimerRemaining > 0.6f)
             {
                 StarCount = 3;
             }

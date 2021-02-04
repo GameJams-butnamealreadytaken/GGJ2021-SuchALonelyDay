@@ -169,6 +169,8 @@ MonoBehaviour:
   rb: {fileID: 4215456180148047595}
   CarHorn: {fileID: 8300000, guid: 71b8a112d31ee184b809405540a57588, type: 3}
   CarWheee: {fileID: 8300000, guid: c21c1350feef7304ea82c526ac67b5a2, type: 3}
+  CarWheee2: {fileID: 8300000, guid: f2e8dad706e60214fbb62d55bade52b8, type: 3}
+  CarWheee3: {fileID: 8300000, guid: 9d572460911fb5b47b12f41d29ff8959, type: 3}
   fLaunchSpeed: 15000
   fRotationSpeed: 50
   fMaxLegDistanceFromTarget: 0.15
